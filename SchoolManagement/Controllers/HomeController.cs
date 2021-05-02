@@ -95,5 +95,30 @@ namespace SchoolManagement.Controllers
             connection.Close();
             return stud;
         }
+        
+        [HttpPost]
+        
+        public string StudentUpdate(Student student)
+        {
+         
+            SqlConnection connection = new SqlConnection(connectionString);
+            connection.Open();
+            SqlCommand command = new SqlCommand("StudentUpdate", connection);
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.Parameters.AddWithValue("Id",student.Id);
+            command.Parameters.AddWithValue("Name", student.Name);
+
+
+            command.ExecuteNonQuery();
+
+            
+            
+            command.Parameters.Add("@Id", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            command.Parameters.Add("@Name", System.Data.SqlDbType.VarChar, 20).Direction = System.Data.ParameterDirection.Output;
+
+            //return student.ToString();
+
+            return student.Id + student.Name.ToString();
+        }
     }
 }
