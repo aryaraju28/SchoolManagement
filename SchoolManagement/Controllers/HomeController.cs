@@ -62,22 +62,27 @@ namespace SchoolManagement.Controllers
 
         }
         [HttpPost]
-        public List<string> StudentList(Order order)
+        public List<Order> StudentList(Order order)
         {
-            List<string> stud = new List<string>();
+            List<Order> stud = new List<Order>();
 
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
             SqlCommand command = new SqlCommand("StudentList", connection);
             command.CommandType = System.Data.CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("Order", order.Order);
+            command.Parameters.AddWithValue("Order", order.order);
 
 
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
 
-                stud.Add(reader["Name"].ToString());
+                order.Name = reader["Name"].ToString();
+                order.Malayalam = Convert.ToInt32(reader["Malayalam"]);
+                order.Hindi = Convert.ToInt32(reader["Hindi"]);
+                order.English = Convert.ToInt32(reader["English"]);
+                order.CurrentTime = reader["Time"].ToString();
+                stud.Add(order);
 
 
 
